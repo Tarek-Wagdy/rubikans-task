@@ -1,0 +1,81 @@
+﻿@using invoice_project.Models
+@model Invoice
+@{
+    ViewData["Title"] = "New";
+    SelectList customers = new SelectList(ViewBag.customers, "Id", "Name");
+    SelectList stores = new SelectList(ViewBag.stores, "Id", "Name");
+    SelectList items = new SelectList(ViewBag.items, "Id", "Name");
+}
+
+
+<form asp-action="New" asp-controller="invoice" method="post">
+    <div class="row">
+        <div class="col">
+            <input type="text" class="form-control" placeholder="Serial">
+        </div>
+        <div class="col">
+            <input type="text" class="form-control" placeholder="invoice Natural">
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col">
+            <label>customer :</label>
+            <select asp-items="customers" asp-for="customer_id"></select>
+        </div>
+        <div class="col">
+            <label>store :</label>
+            <select asp-items="stores" asp-for="store_id"></select>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col">
+            <label>create date :</label>
+            <input type="date">
+        </div>
+        <div class="col">
+            <label>Due date :</label>
+            <input type="date">
+        </div>
+    </div>
+    <div class="">
+        <label for="itemId">item :</label>
+        <select asp-items="items" name="itemId" id="itemId">
+        </select>
+        <label for="itemQuantity">Quantity</label>
+        <input type="number" name="itemQuantity" id="itemQuantity">
+        <span class="btn btn-sm btn-primary" onclick="addItem()">Add</span>
+    </div>
+    <div class="row">
+        <div class="col">
+            <table class="table">
+                <thead class="thead-dark" style="background-color:dimgray;color:white">
+                    <tr>
+
+                        <th scope="col">Name</th>
+                        <th scope="col">Unit</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Vat</th>
+                        <th scope="col">Tax Value</th>
+                        <th scope="col">Total Cost</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="d-flex flex-column align-items-right">
+        <input type="submit" />
+        <label id="costLabel"></label>
+    </div>
+</form>
+
+<script src="/js/invoice.js">
+
+</script>
+
