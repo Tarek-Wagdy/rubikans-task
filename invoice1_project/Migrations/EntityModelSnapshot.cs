@@ -58,8 +58,8 @@ namespace invoice1_project.Migrations
                     b.Property<int>("customer_id")
                         .HasColumnType("int");
 
-                    b.Property<int>("discount")
-                        .HasColumnType("int");
+                    b.Property<float>("discount")
+                        .HasColumnType("real");
 
                     b.Property<DateTime>("invoice_date")
                         .HasColumnType("datetime2");
@@ -70,8 +70,8 @@ namespace invoice1_project.Migrations
                     b.Property<float>("tax")
                         .HasColumnType("real");
 
-                    b.Property<int>("totalCost")
-                        .HasColumnType("int");
+                    b.Property<float>("totalCost")
+                        .HasColumnType("real");
 
                     b.HasKey("Id");
 
@@ -114,8 +114,8 @@ namespace invoice1_project.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("price")
-                        .HasColumnType("int");
+                    b.Property<float>("price")
+                        .HasColumnType("real");
 
                     b.Property<string>("unit")
                         .IsRequired()

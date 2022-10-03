@@ -1,5 +1,6 @@
 ﻿using invoice_project.Models;
 using invoice1_project.Repositories;
+using invoice1_project.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -26,25 +27,38 @@ namespace invoice1_project.Controllers
         [HttpPost]
         public IActionResult New(Invoice invoice)
         {
-            int totalPrice = 0;
+            float totalPrice = 0;
             float tax = 0.0f;
             List<InvoiceItem> invoiceItems = GetFromSession<List<InvoiceItem>>("items");
-            foreach (InvoiceItem item in invoiceItems)
+            if(invoiceItems==null)
             {
-                totalPrice += item.Item.price * item.quantity;
+                
+                ViewBag.customers = context.Customer.ToList();
+                ViewBag.stores = context.Store.ToList();
+                ViewBag.items = context.Item.ToList();
+                return View("New");
+
             }
-            tax = (float)(totalPrice * 0.14);
-            invoice.totalCost = totalPrice;
-            invoice.tax = tax;
-            iinvoiceRepository.insert(invoice);
-            int invoiceId = invoice.Id;
-            //insert invoice items
-            foreach (InvoiceItem item in invoiceItems)
+            else
             {
-                InvoiceItem invoiceItem = new InvoiceItem() { invoice_id = invoiceId, item_id = item.item_id, quantity = item.quantity };
-                context.InvoiceItem.Add(invoiceItem);
-                context.SaveChanges();
+                foreach (InvoiceItem item in invoiceItems)
+                {
+                    totalPrice += item.Item.price * item.quantity;
+                }
+                tax = totalPrice * 0.14f;
+                invoice.totalCost = totalPrice+tax;
+                invoice.tax = tax;
+                iinvoiceRepository.insert(invoice);
+                int invoiceId = invoice.Id;
+                //insert invoice items
+                foreach (InvoiceItem item in invoiceItems)
+                {
+                    InvoiceItem invoiceItem = new InvoiceItem() { invoice_id = invoiceId, item_id = item.item_id, quantity = item.quantity };
+                    context.InvoiceItem.Add(invoiceItem);
+                    context.SaveChanges();
+                }
             }
+            
 
 
             //clear session 
@@ -54,21 +68,28 @@ namespace invoice1_project.Controllers
 
         }
         [HttpGet]
-        public float GetTotalCost()
+        public TaxAndCostViewModel GetTotalCost()
         {
+            float totalTax = 0;
             float totalPrice = 0;
             float InvoiceTotalCost = 0;
+            TaxAndCostViewModel costs = new TaxAndCostViewModel();
             List<InvoiceItem> invoiceItems = GetFromSession<List<InvoiceItem>>("items");
             if (invoiceItems != null)
             {
                 foreach (InvoiceItem item in invoiceItems)
                 {
-                    totalPrice = item.Item.price * item.quantity;
-                    InvoiceTotalCost += totalPrice;
+                    totalTax += (item.Item.price * item.quantity * 0.14f);
+                    totalPrice +=(item.Item.price * item.quantity);
+                    
                 }
-                return InvoiceTotalCost;
+                InvoiceTotalCost = totalPrice+totalTax;
+                costs.Cost = totalPrice;
+                costs.Tax = totalTax;
+                costs.NetCost = InvoiceTotalCost;
+                return costs;
             }
-            return 0f;
+            return null;
         }
 
         [HttpPost]

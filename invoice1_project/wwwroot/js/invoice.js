@@ -46,5 +46,8 @@ function getInvoiceCost() {
          )
 }
 function updateCost(data) {
-    $("#costLabel").html(`Total Cost : ${data} LE`);
+    console.log(data);
+    $("#costLabel").html(`Total Cost : ${data.cost} LE`);
+    $("#taxLabel").html(`Total tax : ${data.tax} LE`);
+    $("#netCostLabel").html(`Net Total Cost : ${data.netCost} LE`);
 }

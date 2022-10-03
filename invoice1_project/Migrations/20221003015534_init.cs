@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace invoice1_project.Migrations
 {
-    public partial class first : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -31,7 +31,7 @@ namespace invoice1_project.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    price = table.Column<int>(type: "int", nullable: false),
+                    price = table.Column<float>(type: "real", nullable: false),
                     unit = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -59,9 +59,9 @@ namespace invoice1_project.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    totalCost = table.Column<int>(type: "int", nullable: false),
+                    totalCost = table.Column<float>(type: "real", nullable: false),
                     tax = table.Column<float>(type: "real", nullable: false),
-                    discount = table.Column<int>(type: "int", nullable: false),
+                    discount = table.Column<float>(type: "real", nullable: false),
                     invoice_date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     customer_id = table.Column<int>(type: "int", nullable: false),
                     store_id = table.Column<int>(type: "int", nullable: false)
@@ -74,13 +74,13 @@ namespace invoice1_project.Migrations
                         column: x => x.customer_id,
                         principalTable: "Customer",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Invoice_Store_store_id",
                         column: x => x.store_id,
                         principalTable: "Store",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -99,13 +99,13 @@ namespace invoice1_project.Migrations
                         column: x => x.invoice_id,
                         principalTable: "Invoice",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_InvoiceItem_Item_item_id",
                         column: x => x.item_id,
                         principalTable: "Item",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateIndex(
